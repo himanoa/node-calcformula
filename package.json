@@ -1,5 +1,7 @@
 {
-  "name": "calcformula",
+  "name": "calcFormula",
+  "private": false,
+  "main": "./index.js",
   "version": "0.0.1",
   "description": "formula string -> Number",
   "main": "index.js",
@@ -7,5 +9,8 @@
     "test": "mocha tests/*.js"
   },
   "author": "himanoa",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
 }
