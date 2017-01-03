@@ -1,10 +1,21 @@
 "use strict";
 
+function IndivisibleError(a,b){
+  this.message = a + ' / ' + b;
+  var last_part = new Error().stack.match(/[^\s]+$/);
+  this.stack = this.name + ' at ' + last_part;
+}
+Object.setPrototypeOf(IndivisibleError, Error);
+IndivisibleError.prototype = Object.create(Error.prototype);
+IndivisibleError.prototype.name = "IndivisibleError";
+IndivisibleError.prototype.message = "";
+IndivisibleError.prototype.constructor = IndivisibleError;
+
 function FormulaValueError(message) {
-     this.message = message;
-     var last_part = new Error().stack.match(/[^\s]+$/);
-     this.stack = this.name + ' at ' + last_part;
- }
+  this.message = message;
+  var last_part = new Error().stack.match(/[^\s]+$/);
+  this.stack = this.name + ' at ' + last_part;
+}
 Object.setPrototypeOf(FormulaValueError, Error);
 FormulaValueError.prototype = Object.create(Error.prototype);
 FormulaValueError.prototype.name = "FormulaValueError";
@@ -23,17 +34,27 @@ var calcFormula = function(formula, point) {
     '+': function(a,b){ return a+b },
     '-': function(a,b){ return a-b },
     '*': function(a,b){ return a*b },
-    '/': function(a,b){ return a/b }
+    '/': function(a,b){
+      var result = a/b
+      if(isFinite(result)){
+        return result;
+      }else{
+        throw new IndivisibleError(a,b);
+      }
+    }
   }
-  var rpn = formulaToRpn(formula).split('');
+  var rpn = formulaToRpn(formula).split(' ');
   var stack = [0];
   rpn.forEach(function(val){
     if(isFinite(val)){
-      stack.push(val);
+      stack.push(Number(val));
     }else{
-
+      var b = stack.pop();
+      var a = stack.pop();
+      stack.push(operations[val](a,b));
     }
-  })
+  });
+  return point(stack.pop());
 }
 
 var formulaToRpn = function(formula) {
@@ -95,5 +116,6 @@ var formulaToRpn = function(formula) {
 module.exports = {
   calcFormula: calcFormula,
   formulaToRpn: formulaToRpn,
-  FormulaValueError: FormulaValueError
+  FormulaValueError: FormulaValueError,
+  IndivisibleError: IndivisibleError
 }
