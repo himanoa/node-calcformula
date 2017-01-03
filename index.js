@@ -3,7 +3,7 @@
 function FormulaValueError(message) {
      this.message = message;
      var last_part = new Error().stack.match(/[^\s]+$/);
-     this.stack = `${this.name} at ${last_part}`;
+     this.stack = this.name + ' at ' + last_part;
  }
 Object.setPrototypeOf(FormulaValueError, Error);
 FormulaValueError.prototype = Object.create(Error.prototype);
@@ -11,14 +11,29 @@ FormulaValueError.prototype.name = "FormulaValueError";
 FormulaValueError.prototype.message = "";
 FormulaValueError.prototype.constructor = FormulaValueError;
 
-var calcFormula = function(formula, options) {
+var calcFormula = function(formula, point) {
   /**
    * It is a function that takes a string of a formula and return the result.
    * @param {string} formula Calculated formula string.
-   * @param {object} options
+   * @param {function} point
    * @type {number}
    **/
+  if(point == undefined) point = Math.floor;
+  var operations = {
+    '+': function(a,b){ return a+b },
+    '-': function(a,b){ return a-b },
+    '*': function(a,b){ return a*b },
+    '/': function(a,b){ return a/b }
+  }
+  var rpn = formulaToRpn(formula).split('');
+  var stack = [0];
+  rpn.forEach(function(val){
+    if(isFinite(val)){
+      stack.push(val);
+    }else{
 
+    }
+  })
 }
 
 var formulaToRpn = function(formula) {
@@ -38,10 +53,10 @@ var formulaToRpn = function(formula) {
     ')': 0
   };
   formula = formula.replace(/\s+/g, '');
-  if(formula.match(/[^0-9\+\-\*\/\(\)]/g)) {
+  if(formula.match(/[^0-9\+\-\*\/\(\)\.]/g)) {
     throw new FormulaValueError(formula);
   }
-  formula = formula.split("");
+  formula = formula.split(/([\+\-\/\*\(\)])/);
   var stack = new Array();
   formula.unshift('(');
   formula.push(')');
@@ -50,7 +65,7 @@ var formulaToRpn = function(formula) {
   var tmp = "";
 
   formula.forEach(function(val){
-    if(val.match(/[0-9]/)){
+    if(isFinite(val)){
       tmp += val;
     } else {
       if(val != "") {
