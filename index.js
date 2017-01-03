@@ -1,5 +1,16 @@
 "use strict";
 
+function FormulaValueError(message) {
+     this.message = message;
+     var last_part = new Error().stack.match(/[^\s]+$/);
+     this.stack = `${this.name} at ${last_part}`;
+ }
+Object.setPrototypeOf(FormulaValueError, Error);
+FormulaValueError.prototype = Object.create(Error.prototype);
+FormulaValueError.prototype.name = "FormulaValueError";
+FormulaValueError.prototype.message = "";
+FormulaValueError.prototype.constructor = FormulaValueError;
+
 var calcFormula = function(formula, options) {
   /**
    * It is a function that takes a string of a formula and return the result.
@@ -26,6 +37,10 @@ var formulaToRpn = function(formula) {
     '-': 1,
     ')': 0
   };
+  formula = formula.replace(/\s+/g, '');
+  if(formula.match(/[^0-9\+\-\*\/\(\)]/g)) {
+    throw new FormulaValueError(formula);
+  }
   formula = formula.split("");
   var stack = new Array();
   formula.unshift('(');
@@ -59,10 +74,11 @@ var formulaToRpn = function(formula) {
       }
     }
   });
-  return result;
+  return result.replace(/\s+/g, ' ');
 }
 
 module.exports = {
   calcFormula: calcFormula,
-  formulaToRpn: formulaToRpn
+  formulaToRpn: formulaToRpn,
+  FormulaValueError: FormulaValueError
 }
