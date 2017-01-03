@@ -5,13 +5,13 @@ This module receives the calculation formula and returns the calculation resultf
 ## Install
 
 ```
-npm install calcFormula
+npm install calcformula
 ```
 
 ## Example
 
 ```
-var calcFormula = require('calcFormula');
+var calcFormula = require('calcformula');
 calcFormula.calcFormula('2 + 1') // result 3
 ```
 
