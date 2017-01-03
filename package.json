@@ -4,7 +4,7 @@
   "description": "formula string -> Number",
   "main": "index.js",
   "scripts": {
-    "test": "chai"
+    "test": "mocha tests/*.js"
   },
   "author": "himanoa",
   "license": "MIT"
