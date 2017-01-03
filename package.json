@@ -1,0 +1,11 @@
+{
+  "name": "calcformula",
+  "version": "0.0.1",
+  "description": "formula string -> Number",
+  "main": "index.js",
+  "scripts": {
+    "test": "chai"
+  },
+  "author": "himanoa",
+  "license": "MIT"
+}
