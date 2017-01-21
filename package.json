@@ -12,5 +12,13 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^3.5.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AC3ROZ/node-calcformula.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AC3ROZ/node-calcformula/issues"
+  },
+  "homepage": "https://github.com/AC3ROZ/node-calcformula#readme"
 }

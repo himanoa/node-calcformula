@@ -1,6 +1,6 @@
 # calcFormula
 
-This module receives the calculation formula and returns the calculation resultformula returned calculation result.
+This module receives the calculation formula and return the calculation result.
 
 ## Install
 
